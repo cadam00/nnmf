@@ -143,7 +143,7 @@ nmf.qp <- function(x, k, H = NULL, k_means = TRUE, bs = 1, veo = FALSE,
   runtime <- proc.time()
   n <- dim(x)[1]; D <- dim(x)[2]
 
-  # Initialize H exactly like the original
+  # Initialize H with non-negativity only (no simplex)
   if (k_means) {
     H <- nnmf::init(x, k, bs, veo)
   } else {
@@ -194,6 +194,7 @@ nmf.qp <- function(x, k, H = NULL, k_means = TRUE, bs = 1, veo = FALSE,
 
     suppressWarnings({
 
+      # CREATE CLUSTER ONCE BEFORE LOOP
       if (ncores > 1) {
         cl <- parallel::makeCluster(ncores)
         on.exit(parallel::stopCluster(cl), add = TRUE)
